@@ -15,20 +15,29 @@ namespace UWL.GUI
         {
             InitializeComponent();
 
-            CheckForIllegalCrossThreadCalls = false;
-
-            Global.EmulatorLastVersionInfoRetrieved += new EventHandler(Global_EmulatorLastVersionInfoRetrieved);
-
             labelCurrentEmulatorVersion.Text = Global.GetCurrentEmulatorVersion();
-            labelLastEmulatorVersion.Text = "Comprobando ...";
-
-            Global.GetLastEmulatorVersion();
-        }
-
-
-        private void Global_EmulatorLastVersionInfoRetrieved(object sender, EventArgs e)
-        {
             labelLastEmulatorVersion.Text = Global.LastEmulatorVersion;
         }
+
+
+
+        #region Eventos
+        /// <summary>
+        /// Evento: Se pulsa el botón de cancelar.
+        /// </summary>        
+        private void butCancelUpdate_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        /// <summary>
+        /// Evento: Se pulsa el botón de actualizar.
+        /// </summary>
+        private void butUpdateEmulator_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

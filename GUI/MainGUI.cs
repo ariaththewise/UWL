@@ -27,6 +27,8 @@ namespace UWL.GUI
         {
             InitializeComponent();
 
+            CheckForIllegalCrossThreadCalls = false;
+
             Global.EmulatorLastVersionInfoRetrieved += new EventHandler(EmulatorLastVersionInfoRetrieved);
 
             configList = new List<String>();
@@ -42,15 +44,32 @@ namespace UWL.GUI
         #region Eventos
         private void EmulatorLastVersionInfoRetrieved(object sender, EventArgs e)
         {
-            Version currentEmulatorVersion = new Version(Global.GetCurrentEmulatorVersion());
-            Version lastEmulatorVersion = new Version(Global.LastEmulatorVersion);
+            Version currentEmulatorVersion = null;
+            Version lastEmulatorVersion = null;
 
-            if (currentEmulatorVersion.CompareTo(lastEmulatorVersion) < 0)
+            menuItemUpdateEmulator.Enabled = true;
+            progressCheckingLastVersion.Visible = false;
+
+            if (Global.GetCurrentEmulatorVersion().Equals("N/A"))
             {
-                MessageBox.Show("Hay una versión más actual del emulador." +
-                                 Global.NL +
-                                "Puedes actualizarlo desde el menú del lanzador.");
+                labelNewVersionAvailable.BackColor = Color.Red;
+                labelNewVersionAvailable.Text = "No se encontró el emulador WinUAE. Es neceario actualizar.";
             }
+            else
+            {
+                currentEmulatorVersion = new Version(Global.GetCurrentEmulatorVersion());
+                lastEmulatorVersion = new Version(Global.LastEmulatorVersion);
+
+                if (currentEmulatorVersion.CompareTo(lastEmulatorVersion) < 0)
+                {
+                    labelNewVersionAvailable.BackColor = Color.LightGreen;
+                    labelNewVersionAvailable.Text = "Hay una versión más actual del emulador.";
+                }
+                else
+                {
+                    labelNewVersionAvailable.Text = "El emulador está actualizado.";
+                }
+            }            
         }
 
 
@@ -65,10 +84,36 @@ namespace UWL.GUI
 
 
         /// <summary>
+        /// Evento: Se pulsa el menu item para lanzar el emulador con
+        /// la configuración actual.
+        /// </summary>        
+        private void menuItemLaunchThisConfig_Click(object sender, EventArgs e)
+        {
+
+        }        
+
+
+        /// <summary>
+        /// Evento: Se pulsa el menu item para editar la configuración actual.
+        /// </summary>        
+        private void menuItemEditThisConfig_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        /// <summary>
+        /// Evento: Se pulsa el menu item para salir del lanzador.
+        /// </summary>        
+        private void menuItemExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        /// <summary>
         /// Evento: Se pulsa el menu item para actualizar el emulador.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void menuItemUpdateEmulator_Click(object sender, EventArgs e)
         {
             new EmulatorUpdater().Show();
@@ -76,6 +121,7 @@ namespace UWL.GUI
         #endregion
 
 
+        #region Metodos
         /// <summary>
         /// Carga las listas de configuración.
         /// </summary>
@@ -114,5 +160,6 @@ namespace UWL.GUI
 
             return String.Empty;
         }
+        #endregion        
     }
 }

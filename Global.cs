@@ -16,10 +16,22 @@ namespace UWL
     {
         #region Campos
         /// <summary>
+        /// Proceso del emulador WinUAE.
+        /// </summary>
+        private static Process emulator;
+
+
+        /// <summary>
         /// Evento que se dispara cuando se recupera información sobre
         /// la última versión del emulador.
         /// </summary>
         public static event EventHandler EmulatorLastVersionInfoRetrieved;
+
+
+        /// <summary>
+        /// Indica si el emulador está siendo actualizado.
+        /// </summary>
+        private static bool emulatorIsUpdateInProgress;
 
 
         /// <summary>
@@ -42,6 +54,12 @@ namespace UWL
 
 
         /// <summary>
+        /// Fichero INI del emulador.
+        /// </summary>
+        private static UAEIniFile winuaeINIFile;
+
+
+        /// <summary>
         /// Cliente web.
         /// </summary>
         private static WebClient www = new WebClient();
@@ -54,7 +72,16 @@ namespace UWL
         /// </summary>
         public static String CoversDir
         {
-            get { return (UWLDir + SEP + "Covers" + SEP); }
+            get { return (UWLDir +  "Covers" + SEP); }
+        }
+
+
+        /// <summary>
+        /// Versión actual del emulador.
+        /// </summary>
+        public static String CurrentEmulatorVersion
+        {
+            get { return FileVersionInfo.GetVersionInfo(Emulator).FileVersion; }
         }
 
 
@@ -64,6 +91,15 @@ namespace UWL
         public static String Emulator
         {
             get { return (UWLDir + "WinUAE.exe"); }
+        }
+
+
+        /// <summary>
+        /// Comprueba si el emulador está siendo actualizado.
+        /// </summary>
+        public static bool EmulatorIsBeingUpdated
+        {
+            get { return emulatorIsUpdateInProgress; }
         }
 
 
@@ -99,7 +135,7 @@ namespace UWL
         /// </summary>
         public static String ScreenshotsDir
         {
-            get { return (UWLDir + SEP + "Screenshots" + SEP); }
+            get { return (UWLDir + "Captures" + SEP); }
         }
 
 
@@ -122,29 +158,62 @@ namespace UWL
         #endregion
 
 
+        #region Metodos
+        /// <summary>
+        /// Comprueba en Internet el último número de versión
+        /// disponible del emulador.
+        /// </summary> 
+        public static void CheckLastEmulatorVersion()
+        {
+            versionDownload.Start();
+        }
+
 
         /// <summary>
         /// Comprueba si el emulador existe.
         /// </summary>
         public static bool emulatorExists()
         {
-            return File.Exists(UWLDir + SEP + "WinUAE.exe");
-        }
-
-
-        public static String GetCurrentEmulatorVersion()
-        {
-            return FileVersionInfo.GetVersionInfo(Emulator).FileVersion;
+            return File.Exists(UWLDir + "WinUAE.exe");
         }
 
 
         /// <summary>
-        /// Obtiene el último número de versión disponible del emulador.    
-        /// O una N/A en caso de no poderse obtener.
-        /// </summary> 
-        public static void GetLastEmulatorVersion()
+        /// Mantiene las rutas del emulador relativas.
+        /// </summary>
+        private static void keepEmulatorINIRelative()
         {
-            versionDownload.Start();
+            winuaeINIFile = new UAEIniFile(UWLDir + "WinUAE.ini");
+
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.FLOPPY_PATH, @".\Disks\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.KICKSTART_PATH, @".\Roms\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.HDF_PATH, @".\HD\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.CONFIGURATION_PATH, @".\Configurations\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.SCREENSHOT_PATH, @".\Screenshots\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.STATEFILE_PATH, @".\Savestates\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.SAVEIMAGE_PATH, @".\SaveImages\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.VIDEO_PATH, @".\Videos\");
+            winuaeINIFile.setEntry(UAEIniFile.WINUAE_ENTRIES.INPUT_PATH, @".\InputRecordings\");
+        }
+
+
+        /// <summary>
+        /// Inicia el emulador con la configuración indicada.
+        /// </summary>
+        public static void LaunchEmulator(String config)
+        {
+            keepEmulatorINIRelative();
+            Process.Start(Emulator, ("-f " + "\"" + config + "\""));
+        }
+
+
+        /// <summary>
+        /// Obtiene la lista de configuraciones.
+        /// </summary>
+        /// <returns></returns>
+        public static String[] GetConfigList()
+        {
+            return Directory.GetFiles((UWLDir + "Configurations"), "*.uae");
         }
 
 
@@ -193,5 +262,6 @@ namespace UWL
                 EmulatorLastVersionInfoRetrieved(null, null);
             }
         }
+#endregion
     }
 }

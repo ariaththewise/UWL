@@ -37,7 +37,7 @@ namespace UWL.GUI
             loadConfigList();
             listConfigs.Items.AddRange(configListToShow.ToArray());
 
-            Global.GetLastEmulatorVersion();
+            Global.CheckLastEmulatorVersion();
         }
 
 
@@ -50,14 +50,14 @@ namespace UWL.GUI
             menuItemUpdateEmulator.Enabled = true;
             progressCheckingLastVersion.Visible = false;
 
-            if (Global.GetCurrentEmulatorVersion().Equals("N/A"))
+            if (Global.CurrentEmulatorVersion.Equals("N/A"))
             {
                 labelNewVersionAvailable.BackColor = Color.Red;
                 labelNewVersionAvailable.Text = "No se encontró el emulador WinUAE. Es neceario actualizar.";
             }
             else
             {
-                currentEmulatorVersion = new Version(Global.GetCurrentEmulatorVersion());
+                currentEmulatorVersion = new Version(Global.CurrentEmulatorVersion);
                 lastEmulatorVersion = new Version(Global.LastEmulatorVersion);
 
                 if (currentEmulatorVersion.CompareTo(lastEmulatorVersion) < 0)
@@ -89,7 +89,10 @@ namespace UWL.GUI
         /// </summary>        
         private void menuItemLaunchThisConfig_Click(object sender, EventArgs e)
         {
-
+            if (listConfigs.SelectedIndex > -1)
+            {
+                Global.LaunchEmulator(configList[listConfigs.SelectedIndex]);
+            }
         }        
 
 
@@ -127,7 +130,7 @@ namespace UWL.GUI
         /// </summary>
         private void loadConfigList()
         {
-            configList.AddRange(Directory.GetFiles((Global.UWLDir + Global.SEP + "Configurations"), "*.uae"));
+            configList.AddRange(Global.GetConfigList());
             
             configListToShow.AddRange(configList);
             

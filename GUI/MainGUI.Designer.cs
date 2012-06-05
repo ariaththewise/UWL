@@ -35,8 +35,8 @@
             this.menuItemLaunchThisConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemEditThisConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemUpdateEmulator = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemUpdateEmulator = new System.Windows.Forms.ToolStripMenuItem();
             this.verLaAyudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sobreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -70,7 +70,6 @@
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
-            this.menuItemUpdateEmulator,
             this.ayudaToolStripMenuItem});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
@@ -109,33 +108,34 @@
             this.menuItemExit.Text = "Salir";
             this.menuItemExit.Click += new System.EventHandler(this.menuItemExit_Click);
             // 
-            // menuItemUpdateEmulator
-            // 
-            this.menuItemUpdateEmulator.Enabled = false;
-            this.menuItemUpdateEmulator.Name = "menuItemUpdateEmulator";
-            this.menuItemUpdateEmulator.Size = new System.Drawing.Size(137, 20);
-            this.menuItemUpdateEmulator.Text = "Actualizar el emulador";
-            this.menuItemUpdateEmulator.Click += new System.EventHandler(this.menuItemUpdateEmulator_Click);
-            // 
             // ayudaToolStripMenuItem
             // 
             this.ayudaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemUpdateEmulator,
             this.verLaAyudaToolStripMenuItem,
             this.sobreToolStripMenuItem});
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
             this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
             // 
+            // menuItemUpdateEmulator
+            // 
+            this.menuItemUpdateEmulator.Enabled = false;
+            this.menuItemUpdateEmulator.Name = "menuItemUpdateEmulator";
+            this.menuItemUpdateEmulator.Size = new System.Drawing.Size(192, 22);
+            this.menuItemUpdateEmulator.Text = "Actualizar el emulador";
+            this.menuItemUpdateEmulator.Click += new System.EventHandler(this.menuItemUpdateEmulator_Click);
+            // 
             // verLaAyudaToolStripMenuItem
             // 
             this.verLaAyudaToolStripMenuItem.Name = "verLaAyudaToolStripMenuItem";
-            this.verLaAyudaToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.verLaAyudaToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.verLaAyudaToolStripMenuItem.Text = "Ver la ayuda";
             // 
             // sobreToolStripMenuItem
             // 
             this.sobreToolStripMenuItem.Name = "sobreToolStripMenuItem";
-            this.sobreToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.sobreToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.sobreToolStripMenuItem.Text = "Sobre ...";
             // 
             // statusStrip1
@@ -191,7 +191,6 @@
         private System.Windows.Forms.ListBox listConfigs;
         private System.Windows.Forms.PictureBox imgCover;
         private System.Windows.Forms.MenuStrip menu;
-        private System.Windows.Forms.ToolStripMenuItem menuItemUpdateEmulator;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar progressCheckingLastVersion;
         private System.Windows.Forms.ToolStripStatusLabel labelNewVersionAvailable;
@@ -202,6 +201,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemLaunchThisConfig;
         private System.Windows.Forms.ToolStripMenuItem menuItemEditThisConfig;
         private System.Windows.Forms.ToolStripMenuItem menuItemExit;
+        private System.Windows.Forms.ToolStripMenuItem menuItemUpdateEmulator;
     }
 }
 

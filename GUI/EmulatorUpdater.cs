@@ -15,7 +15,7 @@ namespace UWL.GUI
         {
             InitializeComponent();
 
-            labelCurrentEmulatorVersion.Text = Global.GetCurrentEmulatorVersion();
+            labelCurrentEmulatorVersion.Text = Global.CurrentEmulatorVersion;
             labelLastEmulatorVersion.Text = Global.LastEmulatorVersion;
         }
 

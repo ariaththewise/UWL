@@ -7,6 +7,9 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
+using Ionic.Zip;
+
+
 namespace UWL
 {
     /// <summary>
@@ -63,6 +66,18 @@ namespace UWL
         /// Cliente web.
         /// </summary>
         private static WebClient www = new WebClient();
+
+
+        /// <summary>
+        /// Finaliza la extracción de un ZIP.
+        /// </summary>
+        public static event EventHandler ZipExtractionEnds;
+
+
+        /// <summary>
+        /// Se inicia la extracción de un ZIP.
+        /// </summary>
+        public static event EventHandler ZipExtractionStarts;        
         #endregion
 
 
@@ -158,6 +173,28 @@ namespace UWL
         #endregion
 
 
+        #region Eventos
+        /// <summary>
+        /// Evento: La extracción de un ZIP progresa.
+        /// </summary>        
+        private static void zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
+        {
+
+        }
+
+
+        /// <summary>
+        /// Evento: Error al extraer un ZIP.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void zip_ZipError(object sender, ZipErrorEventArgs e)
+        {
+
+        }
+        #endregion
+
+
         #region Metodos
         /// <summary>
         /// Comprueba en Internet el último número de versión
@@ -172,9 +209,48 @@ namespace UWL
         /// <summary>
         /// Comprueba si el emulador existe.
         /// </summary>
-        public static bool emulatorExists()
+        public static bool EmulatorExists()
         {
             return File.Exists(UWLDir + "WinUAE.exe");
+        }
+
+
+        /// <summary>
+        /// Extrae un archivo ZIP.
+        /// </summary>
+        /// <param name="zipPath">Archivo ZIP a extraer.</param>
+        /// <param name="dest">Ruta donde extraer el ZIP.</param>
+        private static void extractZIP(String zipPath, String dest)
+        {
+            if (!File.Exists(zipPath))
+            {
+                throw new FileNotFoundException("No se encontró el archivo a extraer: '" + zipPath + "'.");
+            }
+            else
+            {
+                if (!ZipFile.IsZipFile(zipPath))
+                {
+                    throw new Exception("El archivo '" + zipPath + "' no es un archivo ZIP válido.");
+                }
+                else
+                {
+                    if (!Directory.Exists(dest))
+                    {
+                        Directory.CreateDirectory(dest);
+
+                        ZipFile zip = new ZipFile(zipPath);
+
+                        zip.ExtractProgress += new EventHandler<ExtractProgressEventArgs>(zip_ExtractProgress);
+                        zip.ZipError += new EventHandler<ZipErrorEventArgs>(zip_ZipError);
+
+                        ZipExtractionStarts(null, null);
+
+                        // TODO: Código de extracción.
+
+                        ZipExtractionEnds(null, null);
+                    }
+                }
+            }
         }
 
 

@@ -16,8 +16,15 @@ namespace UWL.GUI
     public partial class MainGUI : Form
     {
         #region Campos
+        /// <summary>
+        /// Lista de configuraciones encontradas.
+        /// </summary>
         private List<String> configList;
-        private List<String> configListToShow;
+
+
+        /// <summary>
+        /// Configuración seleccionada.
+        /// </summary>
         private String selectedConfigEntry;
         #endregion
 
@@ -30,14 +37,11 @@ namespace UWL.GUI
             CheckForIllegalCrossThreadCalls = false;
 
             Global.EmulatorLastVersionInfoRetrieved += new EventHandler(EmulatorLastVersionInfoRetrieved);
+            Global.CheckLastEmulatorVersion();
 
             configList = new List<String>();
-            configListToShow = new List<String>();
 
             loadConfigList();
-            listConfigs.Items.AddRange(configListToShow.ToArray());
-
-            Global.CheckLastEmulatorVersion();
         }
 
 
@@ -78,7 +82,7 @@ namespace UWL.GUI
         /// </summary>
         private void listConfigs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedConfigEntry = configListToShow[listConfigs.SelectedIndex];
+            selectedConfigEntry = listConfigs.SelectedItem.ToString();
             imgCover.ImageLocation = getCover(selectedConfigEntry);
         }
 
@@ -131,12 +135,10 @@ namespace UWL.GUI
         private void loadConfigList()
         {
             configList.AddRange(Global.GetConfigList());
-            
-            configListToShow.AddRange(configList);
-            
-            for (int e = 0; e < configList.Count; e ++)
+
+            foreach (String config in configList)
             {
-                configListToShow[e] = configListToShow[e].Substring(configListToShow[e].LastIndexOf("\\") + 1).Replace(".uae", "");
+                listConfigs.Items.Add(config.Substring(config.LastIndexOf("\\") + 1).Replace(".uae", ""));
             }
         }
 
